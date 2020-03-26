@@ -1,6 +1,3 @@
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,12 +51,4 @@ public class Document implements Serializable {
         this.tags.put(key, value);
     }
 
-    public void view() throws InvalidCatalogException {
-        var desktop = Desktop.getDesktop();
-        try {
-            desktop.open(new File(this.path));
-        } catch (IOException e) {
-            throw new InvalidCatalogException("Could not open document.", e);
-        }
-    }
 }

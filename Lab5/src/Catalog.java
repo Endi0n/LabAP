@@ -7,22 +7,6 @@ public class Catalog implements Serializable {
     private String path;
     private List<Document> documents;
 
-    public static Catalog load(String path) throws InvalidCatalogException {
-        try (var ois = new ObjectInputStream(new FileInputStream(path))) {
-            return (Catalog) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            throw new InvalidCatalogException("Catalog could not be loaded.", e);
-        }
-    }
-
-    public void save() throws InvalidCatalogException {
-        try (var oos = new ObjectOutputStream(new FileOutputStream(this.path))) {
-            oos.writeObject(this);
-        } catch (IOException e) {
-            throw new InvalidCatalogException("Catalog could not be saved.", e);
-        }
-    }
-
     public Catalog(String name, String path, List<Document> documents) {
         this.name = name;
         this.path = path;
