@@ -1,12 +1,11 @@
 import javax.imageio.ImageIO;
-import javax.imageio.stream.FileImageInputStream;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class ControlPanel extends JPanel {
     final MainFrame frame;
@@ -14,6 +13,8 @@ public class ControlPanel extends JPanel {
     JButton saveBtn = new JButton("Save");
     JButton resetBtn = new JButton("Reset");
     JButton exitBtn = new JButton("Exit");
+
+    JFileChooser fileChooser = new JFileChooser();
 
     public ControlPanel(MainFrame frame) {
         this.frame = frame;
@@ -34,11 +35,20 @@ public class ControlPanel extends JPanel {
 
         exitBtn.addActionListener(this::exit);
         add(exitBtn);
+
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+        fileChooser.setDialogTitle("Chose file");
+
+        fileChooser.setFileFilter(new FileNameExtensionFilter("*.png", "png"));
     }
 
     private void load(ActionEvent e) {
         try {
-            frame.drawingPanel.image = ImageIO.read(new File("./test.png"));
+            var ret = fileChooser.showOpenDialog(new JPanel());
+            if (ret != JFileChooser.APPROVE_OPTION)
+                return;
+
+            frame.drawingPanel.image = ImageIO.read(new File(fileChooser.getSelectedFile().getAbsolutePath()));
             frame.drawingPanel.graphics = frame.drawingPanel.image.createGraphics();
             frame.drawingPanel.repaint();
         } catch (IOException ex) {
@@ -48,7 +58,19 @@ public class ControlPanel extends JPanel {
 
     private void save(ActionEvent e) {
         try {
-            ImageIO.write(frame.drawingPanel.image, "PNG", new File("./test.png"));
+            var ret = fileChooser.showSaveDialog(new JPanel());
+            if (ret != JFileChooser.APPROVE_OPTION)
+                return;
+
+            var fileName = fileChooser.getSelectedFile().getAbsolutePath();
+            var fileSplit = fileName.split(".");
+
+            var fileExtension = (fileSplit.length > 0) ? fileSplit[fileSplit.length - 1] : "";
+
+            if (!fileExtension.toLowerCase().equals("png"))
+                fileName += ".png";
+
+            ImageIO.write(frame.drawingPanel.image, "PNG", new File(fileName));
         } catch (IOException ex) {
             System.err.println(ex);
         }

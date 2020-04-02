@@ -5,6 +5,7 @@ public class MainFrame extends JFrame {
     ControlPanel controlPanel;
     ConfigPanel configPanel;
     DrawingPanel drawingPanel;
+    FigurePanel figurePanel;
 
     public MainFrame() {
         super("My Drawing Application");
@@ -16,6 +17,9 @@ public class MainFrame extends JFrame {
 
         controlPanel = new ControlPanel(this);
         add(controlPanel, BorderLayout.NORTH);
+
+        figurePanel = new FigurePanel(this);
+        add(figurePanel, BorderLayout.WEST);
 
         configPanel = new ConfigPanel(this);
         add(configPanel, BorderLayout.SOUTH);
