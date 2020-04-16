@@ -1,22 +1,45 @@
 package ro.uaic.info.app;
 
-import ro.uaic.info.dao.AlbumController;
-import ro.uaic.info.dao.ArtistController;
-import ro.uaic.info.dao.Database;
-import ro.uaic.info.dao.DatabaseException;
+import com.github.javafaker.Faker;
+import ro.uaic.info.dao.*;
+
+import java.util.LinkedList;
+import java.util.stream.IntStream;
 
 public class App {
     public static void main(String[] args) {
         try {
-            ArtistController.create("O-Zone", "Romania");
+            var faker = new Faker();
 
-            var band = ArtistController.findByName("O-Zone");
+            var artists = IntStream.rangeClosed(1, 10).mapToObj(i -> faker.artist().name()).toArray(String[]::new);
+            var countries = IntStream.rangeClosed(1, 10).mapToObj(i -> faker.country().name()).toArray(String[]::new);
+            var albums = IntStream.rangeClosed(1, 10).mapToObj(i -> faker.ancient().titan()).toArray(String[]::new);
 
-            AlbumController.create("DiscO-Zone", band.getId(), 2003);
+            for (int i = 0; i < 10; ++i)
+                ArtistController.create(artists[i], countries[i]);
 
-            var album = AlbumController.findByArtist(band.getId());
+            for (int i = 0; i < 10; ++i) {
+                var artist = (int) (Math.random() * 10);
+                AlbumController.create(
+                        albums[i],
+                        ArtistController.findByName(artists[artist]).getId(),
+                        (int) (Math.random() * 220) + 1800
+                );
+            }
 
-            System.out.printf("Album title: %s (%d)\n", album.getName(), album.getReleaseYear());
+            var charts = IntStream.range(1, 3).mapToObj(i -> faker.ancient().god()).toArray(String[]::new);
+
+            for (var chart : charts) {
+                var chartAlbums = new LinkedList<String>();
+                for (int i = 0; i < (int) (Math.random() * 3) + 3; ++i)
+                    chartAlbums.add(albums[(int)(Math.random() * albums.length)]);
+                ChartController.create(chart, chartAlbums);
+            }
+
+            Database.commit();
+
+            for (var artist : ArtistController.getRanking(3))
+                System.out.println(artist.getName());
 
             Database.closeConnection();
         } catch (DatabaseException e) {

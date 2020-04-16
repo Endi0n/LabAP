@@ -22,9 +22,17 @@ public class Database {
         return con;
     }
 
+    public static void commit() throws DatabaseException {
+        try {
+            con.commit();
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        }
+    }
+
     public static void closeConnection() throws DatabaseException {
         try {
-            con.close();
+            if (con != null) con.close();
         } catch (SQLException e) {
             throw new DatabaseException(e);
         }
