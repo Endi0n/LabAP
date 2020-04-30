@@ -5,10 +5,21 @@
  */
 package ro.uaic.info.util;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+
 /**
  *
  * @author octavian
  */
 public class PersistenceUtil {
+    private static EntityManager entityManagerFactory;
     
+    public static EntityManager getEntityManagerFactory() {
+        if (entityManagerFactory == null)
+            entityManagerFactory = Persistence.createEntityManagerFactory("MusicAlbumsPU")
+                    .createEntityManager();
+        
+        return entityManagerFactory;
+    }
 }

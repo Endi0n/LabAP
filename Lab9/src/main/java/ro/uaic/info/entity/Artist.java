@@ -52,6 +52,11 @@ public class Artist implements Serializable {
         this.id = id;
         this.name = name;
     }
+    
+    public Artist(String name, String country) {
+        this.name = name;
+        this.country = country;
+    }
 
     public Integer getId() {
         return id;

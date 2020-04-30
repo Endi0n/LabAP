@@ -58,6 +58,11 @@ public class Album implements Serializable {
         this.name = name;
         this.artistId = artistId;
     }
+    
+    public Album(String name, Artist artist) {
+        this.name = name;
+        this.artistId = artist.getId();
+    }
 
     public Integer getId() {
         return id;
