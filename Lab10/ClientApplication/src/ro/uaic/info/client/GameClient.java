@@ -23,5 +23,12 @@ public class GameClient {
 
     public void send(String message) {
         out.println(message);
+        out.flush();
+    }
+
+    public void close() throws IOException{
+        in.close();
+        out.close();
+        socket.close();
     }
 }

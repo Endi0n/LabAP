@@ -8,7 +8,7 @@ public class Main {
         try {
             var client = new GameClient("localhost", 8001);
             System.out.println(client.readLine());
-            client.send("exit");
+            client.send("stop");
             System.out.println(client.readLine());
         } catch (IOException e) {
             e.printStackTrace();
