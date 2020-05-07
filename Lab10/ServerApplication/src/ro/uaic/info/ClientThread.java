@@ -1,4 +1,4 @@
-package ro.uaic.info.server;
+package ro.uaic.info;
 
 import java.io.BufferedReader;
 import java.io.IOException;
